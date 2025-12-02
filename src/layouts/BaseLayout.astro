@@ -10,7 +10,7 @@ const { title, description = 'Digital Business Card' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="id" class="dark">
+<html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -25,11 +25,84 @@ const { title, description = 'Digital Business Card' } = Astro.props;
     <style>
       body { font-family: 'Inter', sans-serif; }
     </style>
+    <script is:inline>
+      (function () {
+        try {
+          const stored = localStorage.getItem('theme');
+          const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = stored || (systemPrefersDark ? 'dark' : 'light');
+          const root = document.documentElement;
+          if (theme === 'dark') {
+            root.classList.add('dark');
+          } else {
+            root.classList.remove('dark');
+          }
+          root.dataset.theme = theme;
+        } catch (e) {
+          // ignore
+        }
+      })();
+    </script>
   </head>
-  <body class="min-h-screen bg-[#1a1a1a] text-white antialiased">
+  <body class="min-h-screen antialiased bg-[color:var(--color-bg-primary)] text-[color:var(--color-text-primary)]">
+    <!-- Theme Toggle -->
+    <button
+      id="theme-toggle"
+      type="button"
+      aria-label="Toggle theme"
+      class="fixed right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-bg-secondary)] text-sm text-[color:var(--color-text-secondary)] shadow-md backdrop-blur"
+    >
+      <span id="theme-toggle-icon">☾</span>
+    </button>
+
+    <!-- Global Loader (1.5s) -->
+    <div
+      id="page-loader"
+      class="fixed inset-0 z-40 flex items-center justify-center bg-[color:var(--color-bg-primary)]/95 transition-opacity duration-300"
+    >
+      <div class="loader"></div>
+    </div>
+
     <slot />
-    <script>
+
+    <script is:inline>
       import 'flowbite';
+
+      const root = document.documentElement;
+      const btn = document.getElementById('theme-toggle');
+      const icon = document.getElementById('theme-toggle-icon');
+      const pageLoader = document.getElementById('page-loader');
+
+      function applyTheme(theme) {
+        if (theme === 'dark') {
+          root.classList.add('dark');
+          icon && (icon.textContent = '☾');
+        } else {
+          root.classList.remove('dark');
+          icon && (icon.textContent = '☼');
+        }
+        root.dataset.theme = theme;
+        try {
+          localStorage.setItem('theme', theme);
+        } catch (e) {
+          // ignore
+        }
+      }
+
+      const current = root.dataset.theme || (root.classList.contains('dark') ? 'dark' : 'light');
+      applyTheme(current);
+
+      btn?.addEventListener('click', () => {
+        const next = root.classList.contains('dark') ? 'light' : 'dark';
+        applyTheme(next);
+      });
+
+      // Hide loader after 1.5s
+      if (pageLoader) {
+        setTimeout(() => {
+          pageLoader.classList.add('opacity-0', 'pointer-events-none');
+        }, 1500);
+      }
     </script>
   </body>
 </html>
