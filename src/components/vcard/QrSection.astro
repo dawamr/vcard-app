@@ -1,0 +1,23 @@
+---
+import { getDirectusAssetUrl } from '../../lib/directus';
+
+interface Props {
+  qrcodeId: string | null;
+  slug: string;
+}
+
+const { qrcodeId, slug } = Astro.props;
+
+const qrUrl = getDirectusAssetUrl(qrcodeId, { width: 256 });
+---
+
+{qrUrl && (
+  <div class="mt-6 flex flex-col items-center rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">
+    <h2 class="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Scan QR Code</h2>
+    <img
+      src={qrUrl}
+      alt={`QR Code for ${slug}`}
+      class="h-40 w-40 rounded-lg"
+    />
+  </div>
+)}

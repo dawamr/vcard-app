@@ -1,0 +1,47 @@
+---
+interface Props {
+  name: string;
+  phone: string;
+  email: string;
+  company: string;
+}
+
+const { name, phone, email, company } = Astro.props;
+---
+
+<div class="px-6 py-6">
+  <!-- Section Header -->
+  <div class="mb-6 flex items-center gap-2">
+    <svg class="h-5 w-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+    </svg>
+    <h2 class="text-lg font-semibold text-[#F59E0B]">Contact</h2>
+  </div>
+
+  <!-- Contact Fields -->
+  <div class="space-y-5">
+    <div class="border-b border-[#404040] pb-4">
+      <p class="text-xs text-gray-500 mb-1">Name</p>
+      <p class="text-base text-white">{name}</p>
+    </div>
+
+    <div class="border-b border-[#404040] pb-4">
+      <p class="text-xs text-gray-500 mb-1">Mobile</p>
+      <a href={`tel:${phone}`} class="text-base text-white hover:text-[#F59E0B] transition-colors">
+        {phone}
+      </a>
+    </div>
+
+    <div class="border-b border-[#404040] pb-4">
+      <p class="text-xs text-gray-500 mb-1">Email</p>
+      <a href={`mailto:${email}`} class="text-base text-white hover:text-[#F59E0B] transition-colors">
+        {email}
+      </a>
+    </div>
+
+    <div class="border-b border-[#404040] pb-4">
+      <p class="text-xs text-gray-500 mb-1">Company</p>
+      <p class="text-base text-white">{company}</p>
+    </div>
+  </div>
+</div>

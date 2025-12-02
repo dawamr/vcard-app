@@ -1,0 +1,42 @@
+---
+import { getDirectusAssetUrl } from '../../lib/directus';
+
+interface Props {
+  photoId: string | null;
+  firstName: string;
+  lastName: string;
+  title: string;
+  company: string;
+}
+
+const { photoId, firstName, lastName, title, company } = Astro.props;
+
+const photoUrl = getDirectusAssetUrl(photoId, { width: 300, format: 'webp' });
+const fullName = `${firstName} ${lastName}`.trim();
+---
+
+<div class="flex flex-col items-center pt-12 pb-8 text-center">
+  <div class="relative mb-6">
+    {photoUrl ? (
+      <img
+        src={photoUrl}
+        alt={fullName}
+        class="h-36 w-36 rounded-full object-cover ring-4 ring-[#22c55e]"
+      />
+    ) : (
+      <div class="flex h-36 w-36 items-center justify-center rounded-full bg-[#2a2a2a] text-4xl font-bold text-white ring-4 ring-[#22c55e]">
+        {firstName.charAt(0)}{lastName.charAt(0)}
+      </div>
+    )}
+    <!-- Status indicator -->
+    <div class="absolute bottom-1 right-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#2a2a2a] ring-2 ring-[#1a1a1a]">
+      <svg class="h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+      </svg>
+    </div>
+  </div>
+
+  <h1 class="text-2xl font-bold text-white">{fullName}</h1>
+  <p class="mt-1 text-base text-gray-400">{title}</p>
+  <p class="mt-0.5 text-base font-medium text-white">{company}</p>
+</div>

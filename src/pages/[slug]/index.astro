@@ -1,0 +1,84 @@
+---
+export const prerender = false;
+
+import VCardLayout from '../../layouts/VCardLayout.astro';
+import ProfileHeader from '../../components/vcard/ProfileHeader.astro';
+import QuickActions from '../../components/vcard/QuickActions.astro';
+import ContactSection from '../../components/vcard/ContactSection.astro';
+import LocationSection from '../../components/vcard/LocationSection.astro';
+import CompanyInfo from '../../components/vcard/CompanyInfo.astro';
+import BottomNavigation from '../../components/vcard/BottomNavigation.astro';
+import QrModal from '../../components/vcard/QrModal.astro';
+import NotFound from '../../components/feedback/NotFound.astro';
+import { getEmployeeBySlug } from '../../lib/api';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/404');
+}
+
+const employee = await getEmployeeBySlug(slug);
+
+const pageTitle = employee
+  ? `${employee.frist_name} ${employee.last_name} - VCard`
+  : 'Profil Tidak Ditemukan';
+
+const pageDescription = employee
+  ? `${employee.title} at ${employee.company}`
+  : undefined;
+
+const fullName = employee ? `${employee.frist_name} ${employee.last_name}`.trim() : '';
+---
+
+<VCardLayout title={pageTitle} description={pageDescription}>
+  {employee ? (
+    <>
+      <ProfileHeader
+        photoId={employee.photo}
+        firstName={employee.frist_name}
+        lastName={employee.last_name}
+        title={employee.title}
+        company={employee.company}
+      />
+
+      <QuickActions
+        email={employee.email}
+        phone={employee.whatsapp}
+        whatsapp={employee.whatsapp}
+      />
+
+      <ContactSection
+        name={fullName}
+        phone={employee.whatsapp}
+        email={employee.email}
+        company={employee.company}
+      />
+
+      <LocationSection
+        address={employee.company_address}
+        gmapsUrl={employee.company_gmaps}
+      />
+
+      <CompanyInfo
+        companyName={employee.company}
+        description={employee.company_describ}
+        website={employee.company_website}
+      />
+
+      <BottomNavigation slug={slug} />
+
+      <QrModal
+        photoId={employee.photo}
+        firstName={employee.frist_name}
+        lastName={employee.last_name}
+        title={employee.title}
+        company={employee.company}
+        qrcodeId={employee.qrcode}
+        slug={slug}
+      />
+    </>
+  ) : (
+    <NotFound message={`Profil dengan slug "${slug}" tidak ditemukan.`} />
+  )}
+</VCardLayout>
