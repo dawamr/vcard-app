@@ -28,13 +28,52 @@ const fullName = `${firstName} ${lastName}`.trim();
         {firstName.charAt(0)}{lastName.charAt(0)}
       </div>
     )}
-    <!-- Status indicator -->
-    <div class="absolute bottom-1 right-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#2a2a2a] ring-2 ring-[#1a1a1a]">
-      <svg class="h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+    <!-- Theme toggle button -->
+    <button
+      id="profile-theme-toggle"
+      type="button"
+      aria-label="Toggle theme"
+      class="absolute bottom-1 right-1 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-[color:var(--color-bg-secondary)] ring-2 ring-[color:var(--color-border)] transition-colors hover:bg-[color:var(--color-bg-card)]"
+    >
+      <!-- Moon icon (shown in dark mode) -->
+      <svg class="h-4 w-4 text-[color:var(--color-text-secondary)] dark:block hidden" fill="currentColor" viewBox="0 0 20 20" id="moon-icon">
         <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
       </svg>
-    </div>
+      <!-- Sun icon (shown in light mode) -->
+      <svg class="h-4 w-4 text-[color:var(--color-text-secondary)] dark:hidden block" fill="currentColor" viewBox="0 0 20 20" id="sun-icon">
+        <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+      </svg>
+    </button>
   </div>
+
+<script>
+  const profileToggle = document.getElementById('profile-theme-toggle');
+  
+  profileToggle?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.classList.contains('dark');
+    const newTheme = isDark ? 'light' : 'dark';
+    
+    if (newTheme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    root.dataset.theme = newTheme;
+    
+    // Sync with main toggle icon in BaseLayout
+    const mainIcon = document.getElementById('theme-toggle-icon');
+    if (mainIcon) {
+      mainIcon.textContent = newTheme === 'dark' ? '☾' : '☼';
+    }
+    
+    try {
+      localStorage.setItem('theme', newTheme);
+    } catch (e) {
+      // ignore
+    }
+  });
+</script>
 
   <h1 class="text-2xl font-bold text-white">{fullName}</h1>
   <p class="mt-1 text-base text-gray-400">{title}</p>

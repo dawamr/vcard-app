@@ -65,9 +65,11 @@ const { title, description = 'Digital Business Card' } = Astro.props;
 
     <slot />
 
-    <script is:inline>
+    <script>
       import 'flowbite';
+    </script>
 
+    <script is:inline>
       const root = document.documentElement;
       const btn = document.getElementById('theme-toggle');
       const icon = document.getElementById('theme-toggle-icon');
