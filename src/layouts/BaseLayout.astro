@@ -45,16 +45,6 @@ const { title, description = 'Digital Business Card' } = Astro.props;
     </script>
   </head>
   <body class="min-h-screen antialiased bg-[color:var(--color-bg-primary)] text-[color:var(--color-text-primary)]">
-    <!-- Theme Toggle -->
-    <button
-      id="theme-toggle"
-      type="button"
-      aria-label="Toggle theme"
-      class="fixed right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-bg-secondary)] text-sm text-[color:var(--color-text-secondary)] shadow-md backdrop-blur"
-    >
-      <span id="theme-toggle-icon">☾</span>
-    </button>
-
     <!-- Global Loader (1.5s) -->
     <div
       id="page-loader"
@@ -70,34 +60,7 @@ const { title, description = 'Digital Business Card' } = Astro.props;
     </script>
 
     <script is:inline>
-      const root = document.documentElement;
-      const btn = document.getElementById('theme-toggle');
-      const icon = document.getElementById('theme-toggle-icon');
       const pageLoader = document.getElementById('page-loader');
-
-      function applyTheme(theme) {
-        if (theme === 'dark') {
-          root.classList.add('dark');
-          icon && (icon.textContent = '☾');
-        } else {
-          root.classList.remove('dark');
-          icon && (icon.textContent = '☼');
-        }
-        root.dataset.theme = theme;
-        try {
-          localStorage.setItem('theme', theme);
-        } catch (e) {
-          // ignore
-        }
-      }
-
-      const current = root.dataset.theme || (root.classList.contains('dark') ? 'dark' : 'light');
-      applyTheme(current);
-
-      btn?.addEventListener('click', () => {
-        const next = root.classList.contains('dark') ? 'light' : 'dark';
-        applyTheme(next);
-      });
 
       // Hide loader after 1.5s
       if (pageLoader) {

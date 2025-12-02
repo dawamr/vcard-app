@@ -34,19 +34,21 @@ const fullName = employee ? `${employee.frist_name} ${employee.last_name}`.trim(
 <VCardLayout title={pageTitle} description={pageDescription}>
   {employee ? (
     <>
-      <ProfileHeader
-        photoId={employee.photo}
-        firstName={employee.frist_name}
-        lastName={employee.last_name}
-        title={employee.title}
-        company={employee.company}
-      />
+      <div class="mx-6 mt-8 mb-4 overflow-hidden rounded-2xl bg-[color:var(--color-bg-card)] shadow-sm border border-[color:var(--color-border)]/70 dark:bg-[#111827] dark:border-[#1f2937]">
+        <ProfileHeader
+          photoId={employee.photo}
+          firstName={employee.frist_name}
+          lastName={employee.last_name}
+          title={employee.title}
+          company={employee.company}
+        />
 
-      <QuickActions
-        email={employee.email}
-        phone={employee.whatsapp}
-        whatsapp={employee.whatsapp}
-      />
+        <QuickActions
+          email={employee.email}
+          phone={employee.whatsapp}
+          whatsapp={employee.whatsapp}
+        />
+      </div>
 
       <ContactSection
         name={fullName}
